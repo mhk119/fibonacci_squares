@@ -23,439 +23,77 @@ def luc: ℕ → ℕ
 | 1 := 1
 | (n+2) := luc(n+1) +luc n
 
-lemma even_or_odd (n : ℕ ) : 2 ∣ n ∨ 2 ∣ n+1 :=
+@[simp] lemma fib_add ( n :  ℕ) : fib (n+2) = fib (n+1) + fib (n):= by refl
+@[simp] lemma luc_add (n: ℕ ): luc (n+2) = luc (n+1) + luc n:= by refl 
+@[simp] lemma fib_zero : fib 0 =0:= by refl
+@[simp] lemma fib_one : fib 1 = 1:= by refl
+@[simp] lemma fib_two : fib 2= 1:= by refl
+@[simp] lemma luc_zero : luc 0 =2:= by refl
+@[simp] lemma luc_one : luc 1 = 1:= by refl
+
+@[simp] lemma fib_luc_rec (n: ℕ ): luc(n+1) = fib(n+2) + fib (n):=
 begin
-induction n with d hd,
-left,
-use 0,
-refl,
-
-cases hd with hd1 hd2,
-right,
-rw nat.succ_eq_add_one,
-cases hd1 with p q,
-use p+1,
-rw q,
-ring,
-
-left,
-rw nat.succ_eq_add_one,
-exact hd2,
-end
-
-
-lemma res_mod_3 (n: ℕ ) : ∃ k : ℕ, n=3*k ∨ n = 3*k+1 ∨ n=3*k+2 :=
-begin
-induction n with d hd,
-split,
-left,
-have: 0=3*0, from rfl,
-rw ← this,
-rw nat.succ_eq_add_one,
-cases hd with h h1,
-cases h1 with h1 h2,
-suffices: ∃ k: ℕ, d+1=3*k+1,
-cases this with t1 t2,
-use t1,
-cc,
-rw h1,
-use h,
-
-cases h2 with h2 h3,
-suffices: ∃ k : ℕ, d+1 =3*k+2,
-cases this with t1 t2,
-use t1,
-cc,
-rw h2,
-use h,
-
-use h+1,
-left,
-rw h3,
-ring,
-end
-
-lemma induction_with_step_two (P : ℕ → Prop) (h0 : P 0) (h1 : P 1)
-(hss : ∀ n, P n → P (n + 1) → P (n + 2)) : ∀ n, P n :=
-begin
-exact nat.two_step_induction h0 h1 hss,
-
-end
-lemma fib_add ( n :  ℕ) : fib (n+2) = fib (n+1) + fib (n):=
-begin
-refl,
-end
-lemma luc_add (n: ℕ ): luc (n+2) = luc (n+1) + luc n:=
-begin
-refl,
-end
-
-lemma fib_luc_rec_prop (f: ℕ → Prop ): ∀ n: ℕ, luc (n+1) = fib (n+2)+fib(n) :=
-begin
-apply induction_with_step_two,
-refl,
-refl,
-intros h p q,
-ring at q,
-have that: luc(h+2+1) = luc(h+2) + luc (h+1), by refl,
-rw that,
-rw q,
-rw p,
-ring,
-have h2: fib (h+4) =fib(h+3) + fib(h+2), by refl,
-have h3: fib(h+2) = fib(h+1) +fib(h), by refl,
-rw h2,
-rw h3,
-ring,
-end
-
-lemma fib_luc_rec (n: ℕ ): luc(n+1) = fib(n+2) + fib (n):=
-begin
-rw fib_luc_rec_prop,
-intro h,
-exact n=2,
-end
-
-
-lemma zero_or_one (h : ℕ ):  h=0 ∨  (∃ k: ℕ, h=k+1):=
-begin
-induction h with d hd,
-left,
-refl,
-rw nat.succ_eq_add_one,
-right,
-use d,
-end
-
-
-
-lemma fib_luc1_prop ( f: ℕ → Prop ): ∀m: ℕ, ∀ n : ℕ,   2 * fib (m+n) = fib (m) * luc (n) + luc(m) * fib(n):=
-begin
-intro h,
+revert n,
 apply nat.two_step_induction,
-rw add_zero,
-have h1: fib 0 = 0, by refl,
-rw h1,
-rw mul_zero,
-rw add_zero,
-clear h1,
-have h1: luc 0 =2, by refl,
-rw h1,
-ring,
-
-cases zero_or_one h,
-rw h_1,
-refl,
-cases h_1 with a b,
-rw b,
-have: fib 1=1, by refl,
-rw this,
-have that: luc 1 = 1, by refl,
-rw that,
-have none: fib(a+1+1)=fib(a+1)+fib(a), by refl,
-rw none,
-ring,
-rw fib_luc_rec a,
-rw fib_add a,
-ring,
-
-
-
-intros a b c,
-rw nat.succ_eq_add_one,
-rw nat.succ_eq_add_one,
-rw nat.succ_eq_add_one at c,
-ring,
-ring,
-rw ←  add_assoc h a 2,
-rw ← add_assoc at c,
-rw fib_add (h+a),
-rw mul_add,
-rw c,
-rw b,
-have: luc (a+1+1) = luc(a+1) + luc a, by refl,
-rw this,
-have that: fib (a+1+1) =fib(a+1) + fib a, by refl,
-rw that,
-ring,
+{simp}, 
+{simp},
+{intros, simp * at *, ring}
 end
 
-lemma fib_luc1 (m n : ℕ ) : 2 * fib (m+n) = fib (m) * luc (n) + luc(m) * fib(n) :=
+lemma nat_case_bash (h n : ℕ ):  h ≤ n ∨ ∃ (k: ℕ ), h=k+n:=
 begin
-rw fib_luc1_prop,
-intro h,
-exact n=0,
+have t1:= le_or_lt h n, cases t1 with t1 t2,
+{left, assumption},
+{right, use h-n, omega,}
 end
 
-
-lemma zero_or_one_two (n: ℕ ): n=0 ∨ n=1 ∨ (∃ k : ℕ , n =k+2):=
+lemma fib_luc1 (m n : ℕ ) : 2 * fib (m+n) = fib (m) * luc (n) + luc(m) * fib(n):=
 begin
-induction n with d hd,
-left,
-refl,
-cases hd,
-rw nat.succ_eq_add_one,
-right,
-left,
-rw hd,
-cases hd,
-rw nat.succ_eq_add_one,
-right,
-right,
-rw hd,
-use 0,
-
-right,
-right,
-rw nat.succ_eq_add_one,
-cases hd,
-rw hd_h,
-use hd_w+1,
-end
-
-lemma zero_or_one_two_three (n:ℕ ): n=0 ∨ n=1 ∨ n=2 ∨ (∃ k : ℕ, n=k+3):=
-begin
-induction n with d hd,
-left,
-refl,
-cases hd,
-rw nat.succ_eq_add_one,
-suffices: d+1=1,
-cc,
-rw hd,
-cases hd,
-rw nat.succ_eq_add_one,
-suffices: d+1=2,cc,
-rw hd,
-cases hd,
-rw nat.succ_eq_add_one,
-suffices:∃ k : ℕ , d+1=k+3,cc,
-rw hd,
-use 0,
-rw nat.succ_eq_add_one,
-suffices: ∃ k : ℕ  , d+1=k+3, cc,
-cases hd,
-rw hd_h,
-use hd_w+1,
+revert n, apply nat.two_step_induction,
+{simp [mul_comm]},
+{cases nat_case_bash m 1, interval_cases m, 
+    {cases h with k h, rw h, simp, ring},
+    {simp},
+    {simp}},
+{intros, repeat {rw nat.succ_eq_add_one at *}, rw [show m+ (n+1+1) = (m+n)+2, by ring], nth_rewrite 0 ← add_assoc at IH2, 
+rw fib_add, rw mul_add, rw IH1, rw IH2, rw [show n+1+1 =n+2, from rfl], rw fib_add, rw luc_add, ring,}
 end
 
 lemma fib_luc2 (m n : ℕ ): 2* luc (m+n) = 5* fib (m) * fib (n) +luc(m) * luc(n) :=
 begin
-cases zero_or_one_two m,
-rw h,
-rw zero_add,
-have: fib 0 =0, by refl,
-rw this,
-have that: luc 0 =2, by refl,
-rw that,
-ring,
-cases h,
-rw h,
-have : fib 1 =1, by refl,
-rw this,
-have that: luc 1 =1, by refl,
-rw that,
-ring,
-simp,
-cases zero_or_one n, 
-rw h_1,
-refl,
-cases h_1,
-rw h_1_h,
-ring,
-rw fib_luc_rec,
-rw fib_luc_rec,
-rw fib_add,
-rw mul_add,
-rw mul_add,
-rw fib_add,
-ring,
-cases h with a b,
-rw b,
-rw add_comm,
-
-have: luc (n+a+2) = fib (a+n+1) + fib (a+n+3),
-{
-    have : 2=1+1, by refl,
-    rw this,
-    rw fib_luc_rec (n+a+1),
-    ring,
-    rw ←  add_assoc a n 3,
-    rw add_comm a n,
-    rw ← add_assoc a n 1,
-    rw add_comm a n,
-    rw ← add_assoc,
-    rw ← add_assoc,
-    rw add_comm,
-},
-
-rw ← add_assoc n a 2,
-rw this,
-rw mul_add,
-rw add_comm a n,
-rw add_assoc n a,
-rw add_assoc n a,
-rw fib_luc1 n,
-rw fib_luc1 n,
-rw ← add_assoc,
-
-have that: luc(n)*fib(a+1)+luc(n)*fib(a+3) = luc(a+2)*luc(n), 
-{
-    rw fib_luc_rec,
-    ring,
-},
-rw ← that,
-
-have thatt: fib(n)*luc(a+1) + fib(n)*luc(a+3) = 5*fib(a+2)*fib(n),
-{
-    rw ← mul_add,
-    rw fib_luc_rec,
-    rw fib_luc_rec,
-    rw fib_add (a+2),
-    rw fib_add (a+1),
-    simp,
-    ring,
-    rw add_comm (fib(a)) (fib(a+1)),
-    rw ← fib_add a,
-    ring, },
-rw ← thatt,
-ring,
-end
-
-lemma fib_luc_rec_2_prop ( f: ℕ → Prop ) : ∀ m: ℕ , ∀ n: ℕ, luc(m+n+1) = fib(m+1)*luc(n+1) + fib(m)*luc(n):=
-begin
-intro h,
-apply nat.two_step_induction,
-simp,
-have: luc 1 =1 ∧ luc 0 =2,
-split,
-refl,
-refl,
-rw this.1,
-rw this.2,
-ring,
-have this1: fib (h+1) + fib(h) = fib(h+2),
-refl,
-have this2: 2*fib h =fib h + fib h,
-ring,
-rw this2,
-rw ← add_assoc,
-rw this1,
-exact fib_luc_rec h,
-
-ring,
-have: luc 1 =1,
-refl,
-rw this,
-simp,
-have this2: luc(1+1) =3, refl,
-rw this2,
-have this3: 3*fib(h+1) = fib(h+1) + fib(h+1) + fib(h+1), ring,
-rw this3,
-rw add_assoc,
-rw ← fib_add h,
-rw add_assoc,
-have this4: fib(h+1) + fib(h+2) = fib(h+3),
-rw add_comm,
-have t5: 2=1+1, refl,
-rw t5,
-rw ← fib_add (h+1),
-rw this4,
-have t5: 2=1+1, refl,
-rw t5,
-rw fib_luc_rec (h+1),
-ring,
-
-intro p,
-rw nat.succ_eq_add_one,
-rw nat.succ_eq_add_one,
-intros q r,
-have this: luc( h+ (p+1+1)+1) = luc(h+(p+1)+1) + luc (h+ p+1),
-refl,
-rw this,
-rw q,
-rw r,
-ring,
+revert n, apply nat.two_step_induction,
+{simp [mul_comm]},
+{cases nat_case_bash m 1, interval_cases m, 
+    {cases h with k h, rw h, simp, ring},
+    {simp},
+    {simp, ring}},
+{intros, repeat {rw nat.succ_eq_add_one at *}, rw [show m+ (n+1+1) = (m+n)+2, by ring], nth_rewrite 0 ← add_assoc at IH2, 
+rw luc_add, rw mul_add, rw IH1, rw IH2, rw [show n+1+1 =n+2, from rfl], rw fib_add, rw luc_add, ring,}
 end
 
 lemma fib_luc_rec_2 (m n: ℕ): luc(m+n+1) = fib(m+1)*luc(n+1) + fib(m)*luc(n):=
 begin
-apply fib_luc_rec_2_prop,
-intro h,
-exact h=0,
+revert n, apply nat.two_step_induction,
+{simp,ring},
+{cases nat_case_bash m 1, interval_cases m, 
+    {cases h with k h, rw h, simp, ring},
+    {simp}, 
+    {simp}},
+{intros, repeat {rw nat.succ_eq_add_one at *}, rw [show m+ (n+1+1) = (m+n)+2, by ring], nth_rewrite 0 ← add_assoc at IH2, 
+rw luc_add, rw IH1, rw IH2, ring,}
 end
 
 
 lemma fib_luc3 (m: ℕ) : ((luc(2*m) + 2 * (-1: ℤ )^(m)) : ℤ )= ((luc(m))^2 : ℤ ):=
 begin
 cases m with d hd,
-simp,
-have: luc 0 =2,
-refl,
-rw this,
-ring,
-rw nat.succ_eq_add_one,
-ring,
+{simp, ring},
 
-have: luc(2*d+2) = fib(d+1) *luc(d+2) + fib(d) *luc(d+1),
-have t1: 2*d+2 = d + (d+1)+1, ring, 
-rw t1,
-rw fib_luc_rec_2 d (d+1),
+{rw nat.succ_eq_add_one, rw [show 2*(d+1)= d+(d+1)+1, by ring], rw fib_luc_rec_2,
+rw fib_luc_rec d, rw pow_two, 
+suffices goal:  (↑(luc (d + 2)) * ↑(fib (d + 1)) + 2 * (-1) ^ (d + 1): ℤ) = (↑(luc (d + 1)) * ↑(fib (d + 2)): ℤ),
+have t1: (↑(fib (d + 1) * luc (d + 1 + 1) + fib d * (fib (d + 2) + fib d)) + 2 * (-1) ^ (d + 1):ℤ) = (↑(luc(d+2))*↑ (fib (d + 1))   + 2 * (-1) ^ (d + 1)+fib d * (fib (d + 2) + fib d): ℤ ),
 
-rw this,
-
-have t2: fib(d+2)+ fib(d) = luc(d+1) ,
-rw fib_luc_rec,
-ring,
-rw ← t2,
-rw add_mul,
-
-have t3: ((fib d + fib (d + 2)) ^ 2 : ℤ )= (fib (d)*fib (d) + 2*fib(d)*fib(d+2) + fib(d+2)*fib(d+2) : ℤ ),
-ring,
-
-
-rw add_comm (fib(d+2)) (fib d),
-simp,
-rw t3,
-clear t3,
-clear t2,
-clear this,
-
-have: ↑(luc (d + 2)) * ↑(fib (d + 1)) + (↑(fib (d + 2)) * ↑(fib d) + ↑(fib d) * ↑(fib d)) + 2 * (-1 : ℤ ) ^ (d + 1) =↑(fib d) * ↑(fib d)+(↑(luc (d + 2)) * ↑(fib (d + 1)) + (↑(fib (d + 2)) * ↑(fib d)) + 2 * (-1 :ℤ ) ^ (d + 1)),
-ring,
-
-rw this,
-clear this,
-have: (↑(fib d) * ↑(fib d) + 2 * ↑(fib d) * ↑(fib (d + 2)) + ↑(fib (d + 2)) * ↑(fib (d + 2)) : ℤ )= (↑(fib d) * ↑(fib d) + (2 * ↑(fib d) * ↑(fib (d + 2)) + ↑(fib (d + 2)) * ↑(fib (d + 2))) : ℤ ),
-ring,
-rw this,
-
-simp,
-clear this,
-
-have t1: (2 * ↑(fib d) * ↑(fib (d + 2)) + ↑(fib (d + 2)) * ↑(fib (d + 2)) : ℤ) =  (↑(fib d) * ↑(fib (d + 2)) + (↑(fib d) * ↑(fib (d + 2)) + ↑(fib (d + 2)) * ↑(fib (d + 2))): ℤ ),
-ring,
-rw t1,
-clear t1,
-
-have t1: (↑(luc (d + 2)) * ↑(fib (d + 1)) + ↑(fib (d + 2)) * ↑(fib d) + 2 * (-1) ^ (d + 1): ℤ )=  (↑(fib d)*↑(fib (d + 2)) +(↑(luc (d + 2)) * ↑(fib (d + 1))  + 2 * (-1) ^ (d + 1)) : ℤ ),
-ring,
-
-rw t1,
-simp,
-clear t1,
-
-rw ← add_mul,
-
-have: (luc(d+1) :ℤ ) = (fib(d) + fib(d+2) : ℤ ),
-rw fib_luc_rec,
-rw add_comm,
-refl,
-
-rw ← this,
-clear this,
-
-have goal: ∀ d:ℕ, (↑(luc (d + 2)) * ↑(fib (d + 1)) + 2 * (-1) ^ (d + 1): ℤ) = (↑(luc (d + 1)) * ↑(fib (d + 2)): ℤ),
 apply nat.two_step_induction,
 ring,
 ring,
@@ -493,7 +131,7 @@ nth_rewrite 2 luc_add,
 simp,
 rw add_mul,
 ring,
-apply goal,
+apply goal,}
 end
 
 lemma dvd_imp_leq (a b: ℕ   ) (h: b ≥ 1) : a ∣ b → a ≤ b:=
@@ -702,8 +340,7 @@ end
 
 lemma fib_luc_gcd (m: ℕ ) : nat.gcd (fib(3*m)) (luc(3*m)) = 2  :=
 begin
-cases zero_or_one m,
-rw h,
+cases nat_case_bash m 1, interval_cases m, 
 ring,
 cases h with p q,
 rw q,
@@ -815,8 +452,7 @@ cases fib2 with fib2 fib3,
 
 cases h2 with h2 h3,
 rw h2 at h,
-cases zero_or_one w,
-rw h_1 at h,
+cases nat_case_bash w 1, interval_cases w, 
 simp at h,
 rw [show luc 1 =1, from rfl] at h,
 contradiction,
@@ -845,8 +481,7 @@ intro h,
 cases res_mod_3 m,
 cases h_1 with h1 h2,
 rw h1,
-cases zero_or_one w,
-rw h_1,
+cases nat_case_bash w 1, interval_cases w, 
 ring,
 cases h_1 with k f,
 rw f,
@@ -1324,7 +959,7 @@ exact iff.rfl,
 end
 lemma to_3_n_gt_n (n:ℕ ): 3^n >n :=
 begin
-cases zero_or_one n, rw h, simp, 
+cases nat_case_bash n 1, interval_cases n,  simp, 
 cases h with x y, rw y, clear y,
 induction x with d hd, simp, 
 rw nat.succ_eq_add_one, 
@@ -1464,7 +1099,7 @@ swap, rw  nat.dvd_iff_mod_eq_zero at h_1, rw [show 4=2*2, from rfl] at h_2,
 have t3: (n%(2*2))%2 = 2%2, exact congr_fun (congr_arg has_mod.mod h_2) 2,
 rw nat.mod_mul_left_mod at t3, rw nat.add_mod at h_1, rw t3 at h_1, simp at h_1, contradiction,
 
-cases zero_or_one q, rw h_3 at r, left, rw h_2 at r, simp at r, assumption,
+cases nat_case_bash 1 1, interval_cases q, rw h_3 at r, left, rw h_2 at r, simp at r, assumption,
 cases h_3 with f h3, have s1: q >0, linarith,
 rw h_2 at r, rw [show 4 =2*2, from rfl] at r,
 have: ∃ (k r: ℕ ), q =3^r *k ∧ ¬ 3 ∣ k, apply decomp_pow_3 q, exact s1,
@@ -1480,7 +1115,7 @@ have r6: (h^2 + 1)%(luc(2*k))=0, apply nat.mod_eq_zero_of_dvd, assumption,
 have r8: (h: zmod (luc(2*k)))^2 =(-1 : zmod (luc (2*k))), rw ←  zmod.val_cast_nat at r6, simp at r6, rw [show (-1 : zmod (luc (2*k))) = -1+0 , by ring], rw ← r6, ring, assumption,
 have t7: luc(2*k)%4=3, apply luc_mod_4, have t8: (2*k) %6 <6, apply nat.mod_lt, simp, rw ← res_mod_6,split, simp, by_contra, have g2: 3 ∣ k, apply nat.coprime.dvd_of_dvd_mul_left,assumption, exact a, contradiction, contradiction,
 
-rw h_2 at r, cases zero_or_one q, rw h_3 at r, right, simp at r, assumption,
+rw h_2 at r, cases nat_case_bash q 1, interval_cases q, rw h_3 at r, right, simp at r, assumption,
 cases h_3 with f h3, have s1: q >0, linarith,
 rw [show 4 =2*2, from rfl] at r,
 have: ∃ (k r: ℕ ), q =3^r *k ∧ ¬ 3 ∣ k, apply decomp_pow_3 q, exact s1,
@@ -1511,7 +1146,7 @@ rw ← g4 at t13, rw [show (h: zmod (luc(2*k))) ^ 2 * (2⁻¹ * 2⁻¹) = (h*2 �
 have g5: luc(2*k)%4 ≠ 3, apply non_res_3_mod_4, apply luc_pos,
 have g6: luc(2*k)>0, apply luc_pos, 
 have g7: ((h:zmod (luc(2*k)))* 2⁻¹) = ↑(((h:zmod (luc(2*k)))* 2⁻¹).val), rw  @zmod.cast_val (luc(2*k)) g6 ((h:zmod (luc(2*k)))* 2⁻¹), rw g7 at t13, exact t13, 
-contradiction,
+contradiction, 
 end
 
 
