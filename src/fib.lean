@@ -92,7 +92,8 @@ cases m with d hd,
 {rw nat.succ_eq_add_one, rw [show 2*(d+1)= d+(d+1)+1, by ring], rw fib_luc_rec_2,
 rw fib_luc_rec d, rw pow_two, 
 suffices goal:  (↑(luc (d + 2)) * ↑(fib (d + 1)) + 2 * (-1) ^ (d + 1): ℤ) = (↑(luc (d + 1)) * ↑(fib (d + 2)): ℤ),
-have t1: (↑(fib (d + 1) * luc (d + 1 + 1) + fib d * (fib (d + 2) + fib d)) + 2 * (-1) ^ (d + 1):ℤ) = (↑(luc(d+2))*↑ (fib (d + 1))   + 2 * (-1) ^ (d + 1)+fib d * (fib (d + 2) + fib d): ℤ ),
+{}
+
 
 apply nat.two_step_induction,
 ring,
