@@ -2,6 +2,11 @@
 
 A formalisation of Cohn's Proof.
 
+Installation: If you've installed [lean](https://leanprover-community.github.io/get_started.html#regular-install) then type 
+```
+leanproject get mhk119/fibonacci_squares
+```
+
 The files in src are in the following order:
 1. recursions
 2. gcd
