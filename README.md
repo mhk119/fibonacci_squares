@@ -1,6 +1,6 @@
 # 144 is the largest square in the Fibonacci Sequence
 
-A formalisation of Cohn's Proof.
+A formalisation of [Cohn's](https://math.la.asu.edu/~checkman/SquareFibonacci.html) Proof.
 
 Installation: If you've installed [lean](https://leanprover-community.github.io/get_started.html#regular-install) then type 
 ```
