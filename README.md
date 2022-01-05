@@ -7,9 +7,9 @@ If you've installed [lean](https://leanprover-community.github.io/get_started.ht
 leanproject get mhk119/fibonacci_squares
 ```
 
-### Contents of src (refer to [Cohn](https://math.la.asu.edu/~checkman/SquareFibonacci.html))
+### Contents of src
 In addition to the contents below, there are other lemmas formalized in every file that are needed later on in the proofs.
-| No. | File               | Contents             |
+| No. | File               | Contents (refer to [Cohn](https://math.la.asu.edu/~checkman/SquareFibonacci.html))             |
 |-----|--------------------|----------------------|
 | 1   | recursions         | preliminaries 1-3    |
 | 2   | gcd                | preliminaries 4-5    |
