@@ -8,7 +8,7 @@ If you've installed [Lean](https://leanprover-community.github.io/get_started.ht
 leanproject get mhk119/fibonacci_squares
 ```
 
-### Contents of src
+## Contents of src
 <ul>
 <li> In addition to the contents below, there are other lemmas formalized in every file that are needed later on in the proofs. </li>
 <li> Preliminaries 8, 9 are not formalized due to a modification to Cohn's proof. We define Fibonacci and Lucas on naturals and for places where integers are required (Preliminaries 1, 2, 11, 12, 13) we formalized separately an addition and subtraction version. </li></ul>
