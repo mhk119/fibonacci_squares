@@ -1,7 +1,7 @@
 # Formalizing Fibonacci Squares
 
 We formalize [Cohn's proof](https://math.la.asu.edu/~checkman/SquareFibonacci.html) that the only squares in the Fibonacci sequence is 0, 1, and 144.
-Read my [paper](https://kwarc.info/teaching/CICM21WS/fmm5.pdf) or watch my [talk](https://www.youtube.com/watch?v=OCQfkhqg8Yg&ab_channel=leanprovercommunity) for more details
+Read my [paper](https://kwarc.info/teaching/CICM21WS/fmm5.pdf) or watch my [talk](https://www.youtube.com/watch?v=OCQfkhqg8Yg&ab_channel=leanprovercommunity) for more details.
 
 If you've installed [lean](https://leanprover-community.github.io/get_started.html#regular-install) then type 
 ```
